@@ -1,4 +1,11 @@
 #include "ofApp.h"
+/*
+ 
+ Adapted by Francisco Bernardo for the new BITalino SDK and for of_v0.10.1_osx
+ from https://gitlab.doc.gold.ac.uk/rapid-mix/BITalino-OSC-OSX by Mick Grierson
+ 
+*/
+
 
 BITalino::VFrame frames(20); // initialize the a vector of frames with 20 frames
 
@@ -14,7 +21,8 @@ void ofApp::setup(){
     sender.setup(HOST, PORT);
     
     cout << "Connected to device. Press Enter to exit.";
-    
+
+    // Check your BITalino port in the file system on the /dev
     dev = new BITalino("/dev/tty.BITalino-52-29-DevB");
 
     std::string ver = dev->version();    // get device version string
@@ -22,33 +30,9 @@ void ofApp::setup(){
     
     dev->start(1000, {0, 1, 2, 3, 4, 5});   // start acquisition of all channels at 1000 Hz
     
-    /*
-     BITalino::Vint chans;
-     chans.push_back(0);
-     chans.push_back(1);
-     chans.push_back(2);
-     chans.push_back(3);
-     chans.push_back(4);
-     chans.push_back(5);
-     dev->start(1000, chans);
-     
-     
-     //    dev.trigger({false, false, true, false});
-     
-     
-     BITalino::Vbool outputs;
-     outputs.push_back(false);
-     outputs.push_back(false);
-     outputs.push_back(true);
-     outputs.push_back(false);
-     dev->trigger(outputs);
-     */
     ofBackground(0, 0, 0);
     
     ofSetFrameRate(50);
-    
-
-
 }
 
 //--------------------------------------------------------------
@@ -56,8 +40,8 @@ void ofApp::update(){
 
     try {
         
-        //this method attempts to send 20 frames at once, 50 times a second over OSC
-        dev->read(frames); // get 100 frames from device
+        //this method attempts to send 20 OSC messages containing BITalino frames, every 50 times a second
+        dev->read(frames);
         ofxOscMessage m[20];
         
         for (int i = 0;i<20;i++) {
@@ -93,8 +77,8 @@ void ofApp::update(){
 //--------------------------------------------------------------
 void ofApp::draw(){
 
-    myfont.drawString("Sending 6 inputs to port 6448\nusing /wek/inputs", 10, 20);
-    myfont.drawString("Inputs are:\nEMG, ECG, EDA, EEG, ACC, LUX", 10, 70);
+    myfont.drawString("Sending 6 inputs to port 6448\nusing the OSC message /wek/inputs", 10, 20);
+    myfont.drawString("Inputs are:", 10, 70); // \nEMG, ECG, EDA, EEG, ACC, LUX
 
     
     char emgString[255]; // an array of chars
@@ -103,24 +87,23 @@ void ofApp::draw(){
 
     char ecgString[255]; // an array of chars
     sprintf(ecgString, "ECG: %.2f", ecg);
-    myfont.drawString(ecgString, 10, 200);
+    myfont.drawString(ecgString, 10, 175);
 
-    
     char edaString[255]; // an array of chars
     sprintf(edaString, "EDA: %.2f", eda);
-    myfont.drawString(edaString, 10, 250);
+    myfont.drawString(edaString, 10, 225);
 
     char eegString[255]; // an array of chars
     sprintf(eegString, "EEG: %.2f", eeg);
-    myfont.drawString(eegString, 10, 300);
+    myfont.drawString(eegString, 10, 275);
     
     char accString[255]; // an array of chars
     sprintf(accString, "ACC: %.2f", acc);
-    myfont.drawString(accString, 10, 350);
+    myfont.drawString(accString, 10, 325);
 
     char luxString[255]; // an array of chars
     sprintf(luxString, "LUX: %.2f", lux);
-    myfont.drawString(luxString, 10, 400);
+    myfont.drawString(luxString, 10, 375);
 }
 
 //--------------------------------------------------------------
