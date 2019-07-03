@@ -77,7 +77,7 @@ void ofApp::update(){
 //--------------------------------------------------------------
 void ofApp::draw(){
 
-    myfont.drawString("Sending 6 inputs to port 6448\nusing the OSC message /wek/inputs", 10, 20);
+    myfont.drawString("Sending 6 inputs to port 6448\nusing OSC message /wek/inputs", 10, 20);
     myfont.drawString("Inputs are:", 10, 70); // \nEMG, ECG, EDA, EEG, ACC, LUX
 
     
