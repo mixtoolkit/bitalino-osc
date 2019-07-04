@@ -36,5 +36,5 @@ class ofApp : public ofBaseApp{
     
         BITalino *dev;
         float emg, ecg, eda, eeg, acc, lux;
-		
+        ofXml xml;
 };

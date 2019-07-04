@@ -30,4 +30,4 @@ DerivedData/
 /*.gcno
 
 # Executables
-bin/bitalino-oscDebug.app/
+#bin/bitalino-oscDebug.app/

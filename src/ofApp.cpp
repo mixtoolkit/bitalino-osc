@@ -1,7 +1,7 @@
 #include "ofApp.h"
 /*
  
- Adapted by Francisco Bernardo for the new BITalino SDK and for of_v0.10.1_osx
+ Adapted by Francisco Bernardo for the new BITalino SDK and of_v0.10.1_osx
  from https://gitlab.doc.gold.ac.uk/rapid-mix/BITalino-OSC-OSX by Mick Grierson
  
 */
@@ -12,8 +12,14 @@ BITalino::VFrame frames(20); // initialize the a vector of frames with 20 frames
 //--------------------------------------------------------------
 void ofApp::setup(){
 
+    
+    
     ofTrueTypeFont::setGlobalDpi(72);
     myfont.load("verdana.ttf", 14, true, true);
+    
+    if(!xml.load("address.xml")){
+        ofLogError() << "Couldn't load file";
+    }
     
     ofBackground(40, 100, 40);
     
@@ -22,9 +28,17 @@ void ofApp::setup(){
     
     cout << "Connected to device. Press Enter to exit.";
 
+    auto bitalino_config = xml.findFirst("//bitalino");
+    
+    string address = bitalino_config.getChild("address").getValue();
+    
+    
+    
     // Check your BITalino port in the file system on the /dev
-    dev = new BITalino("/dev/tty.BITalino-52-29-DevB");
-
+//    dev = new BITalino("/dev/tty.BITalino-49-80-DevB");
+    
+    dev = new BITalino((char*) address.c_str());
+    
     std::string ver = dev->version();    // get device version string
     printf("BITalino version: %s\n", ver.c_str());
     
